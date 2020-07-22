@@ -6,5 +6,13 @@ const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-let noteArr = [];
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+require("./routes/apiRoutes")(app);
+require("./routes/htmlRoutes")(app);
+
+// telling the server to listen 
+app.listen(PORT, function() {
+    console.log("App listening on PORT: " + PORT);
+  });
