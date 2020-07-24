@@ -1,40 +1,38 @@
 const fs = require("fs");
-var noteData = require("../db/db.json");
+const db = "./db/db.json";
+let noteList = JSON.parse(fs.readFileSync(db, 'utf8'));
 
 module.exports = function(app) {
 
   app.get("/api/notes", function(req, res) {
-    res.json(noteData);
+    res.json(noteList);
   });
 
   app.get("/api/notes/:id", function(req, res) {
-    res.json(noteData[Number(req.params.id)]);
+    res.json(noteList[(req.params.id)]);
   });
 
   app.post("/api/notes", function(req, res) {
-    fs.readFile("./db/db.json", function(err, data){
-      let notes = JSON.parse(data);
-      notes.push(req.body);
-      fs.writeFile("./db/db.json", JSON.stringify(notes), function(err){
-          console.log(err);
-      });
-  });
-  res.send(noteData);
+      let note = req.body;
+      note.id = (noteList.length);
+      noteList.push(note);
+      fs.writeFileSync(db, JSON.stringify(noteList));
+      res.json(noteList)
   });
 
-  
-  // Empty out the array of data
-  app.delete("/api/notes:id", function(req, res) {
+  // Delete note by filtering the object with matching id out of the array
+  app.delete("/api/notes/:id", function(req, res) {
     let noteId = req.params.id;
     let newId = 0;
-    noteData = noteData.filter(currentNote => {
+    console.log(`Deleting note with id:${noteId}`);
+    noteList = noteList.filter(currentNote => {
         return currentNote.id != noteId;
     });
-    for (currentNote of noteData) {
-        currentNote.id = newId.toString();
+    for (currentNote of noteList) {
+        currentNote.id = newId;
         newId++;
     }
-    fs.writeFileSync("./db/db.json", JSON.stringify(noteData));
-    res.json(noteData);
+    fs.writeFileSync(db, JSON.stringify(noteList));
+    res.json(noteList);
     }); 
 };
