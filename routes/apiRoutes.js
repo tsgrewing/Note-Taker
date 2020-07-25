@@ -14,7 +14,7 @@ module.exports = function(app) {
 
   app.post("/api/notes", function(req, res) {
       let note = req.body;
-      note.id = (noteList.length);
+      note.id = (noteList.length) +1;
       noteList.push(note);
       fs.writeFileSync(db, JSON.stringify(noteList));
       res.json(noteList)
@@ -23,7 +23,7 @@ module.exports = function(app) {
   // Delete note by filtering the object with matching id out of the array
   app.delete("/api/notes/:id", function(req, res) {
     let noteId = req.params.id;
-    let newId = 0;
+    let newId = 1;
     console.log(`Deleting note with id:${noteId}`);
     noteList = noteList.filter(currentNote => {
         return currentNote.id != noteId;
