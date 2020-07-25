@@ -18,7 +18,6 @@
   
   ## Demo
   ![Demo](/demo/demogif.gif)
-  ![Demo](/demo/htmldemo.png)
   
   ## Usage
    Deployed on Heroku, link here: [Deployed App](https://floating-fortress-14010.herokuapp.com/)
